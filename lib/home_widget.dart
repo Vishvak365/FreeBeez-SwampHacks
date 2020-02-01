@@ -23,7 +23,7 @@ class _HomeState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.filter),
             onPressed: () {
-              queryData(context);
+              dialogBox(context);
             },
           )
         ],
