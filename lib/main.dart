@@ -32,13 +32,15 @@ class _MyAppState extends State<MyApp> {
 
     //GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
     setState(() {
-      allMarkers.clear();
+      //allMarkers.clear();
+      
       final marker = Marker(
         icon: BitmapDescriptor.defaultMarkerWithHue(270.00),
           markerId: MarkerId("curr_loc"),
           position: LatLng(position.latitude, position.longitude),
           infoWindow: InfoWindow(title: 'Your Location'),
       );
+      allMarkers.removeWhere((item) => item.markerId.value == "curr_loc");
       allMarkers.add(marker);
     });
     //print("Updated location");
