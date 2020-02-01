@@ -23,7 +23,7 @@ class _FreeMapState extends State<FreeMap> {
           return GoogleMap(
             onMapCreated: _onMapCreated,
             initialCameraPosition: CameraPosition(
-              target: LatLng(29.6479375, -82.3440625),
+              target: _center,
               zoom: 18.0,
             ),
             markers: Set.from(allMarkers),
@@ -52,11 +52,11 @@ class _FreeMapState extends State<FreeMap> {
         for (int i = 0; i < val.documents.length; i++) {
           double lat = (val.documents[i].data["loc"].latitude);
           double lon = ((val.documents[i].data["loc"].longitude));
-          String title = (val.documents[i].data["title"]);
+          //String title = (val.documents[i].data["title"]);
           //String description = (val.documents[i].data["description"]);
           allMarkers.add(
             Marker(
-              markerId: MarkerId(title),
+              markerId: MarkerId(i.toString()),
               draggable: true,
               position: LatLng(lat, lon),
               //infoWindow: InfoWindow(title: title, snippet: description)),
@@ -67,7 +67,7 @@ class _FreeMapState extends State<FreeMap> {
         print(e);
       }
     });
-    return Firestore.instance.collection('testPostings').getDocuments();
+    return Firestore.instance.collection('postings').getDocuments();
   }
 
   //when the app boots up create the map and draw all the markers on the mapp
@@ -82,30 +82,4 @@ class _FreeMapState extends State<FreeMap> {
         },
         position: _center));
   }
-}
-
-GoogleMap gmap() {
-  Completer<GoogleMapController> _controller = Completer();
-  List<Marker> allMarkers = [];
-  const LatLng _center = const LatLng(29.6479375, -82.3440625);
-  void _onMapCreated(GoogleMapController controller) {
-    _controller.complete(controller);
-  }
-
-  allMarkers.add(Marker(
-      markerId: MarkerId('myMarker'),
-      draggable: true,
-      onTap: () {
-        print('Marker Tapped');
-      },
-      position: _center));
-
-  return GoogleMap(
-    onMapCreated: _onMapCreated,
-    initialCameraPosition: CameraPosition(
-      target: LatLng(29.6479375, -82.3440625),
-      zoom: 18.0,
-    ),
-    markers: Set.from(allMarkers),
-  );
 }

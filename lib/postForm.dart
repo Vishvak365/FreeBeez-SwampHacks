@@ -67,11 +67,9 @@ class _PostPageState extends State<PostPage> {
                                       final form = _formKey.currentState;
                                       if (form.validate()) {
                                         form.save();
-                                        _post
-                                            .getGPS()
-                                            .then((position) =>
-                                                _post.save(position))
-                                            /*
+                                        _post.getGPS().then(
+                                            (position) => _post.save(position));
+                                        /*
                                             .then(_showDialog(context,
                                                 "Submission Succeeded"))
                                             .catchError(_showDialog(
@@ -99,10 +97,15 @@ class PostForm {
   }
 
   Future<void> save(Position position) {
+    /*
     GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
     return db
         .collection("postings")
         .add({'title': this.title, 'desc': this.desc, 'loc': coordinates});
+        */
+    return db
+        .collection("postings")
+        .add({'title': this.title, 'desc': this.desc});
   }
 }
 
