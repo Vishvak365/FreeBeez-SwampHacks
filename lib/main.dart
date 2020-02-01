@@ -30,7 +30,14 @@ class _MyAppState extends State<MyApp> {
         position: _center));
     allMarkers.add(Marker(
         markerId: MarkerId('Turlington'),
-        position: LatLng(29.648835, -82.343570)));
+        position: LatLng(29.648835, -82.343570),
+        infoWindow: InfoWindow(
+            title: "Surf Club - Free Pizza",
+            snippet:
+                "Come join us and learn more about the surf club with free pizza")));
+    allMarkers.add(Marker(
+        markerId: MarkerId('RolfHall'),
+        position: LatLng(29.649175, -82.344525)));
   }
 
   @override
