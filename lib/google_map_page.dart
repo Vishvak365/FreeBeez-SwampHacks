@@ -15,7 +15,7 @@ GoogleMap gmap() {
       markerId: MarkerId('myMarker'),
       draggable: true,
       onTap: () {
-        print('Marker Tapped');
+        print('Marker Tapped in global_map_page');
       },
       position: _center));
 

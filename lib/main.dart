@@ -22,7 +22,54 @@ class _MyAppState extends State<MyApp> {
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
   }
-
+  _showDialog() {
+    print("Entering show Dialog");
+    showDialog(
+      context: context, //never makes it past this line, something wrong with context
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Alert Dialog title"),
+          content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+        // return Dialog(
+        //   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(40)),
+        //   elevation: 16,
+        //   child: Container(
+        //     height: 400.0,
+        //     width: 360.0,
+        //     child: ListView(
+        //       children: <Widget>[
+        //         SizedBox(height: 20),
+        //         Center(
+        //           child: Text(
+        //             "Leaderboard",
+        //             style: TextStyle(fontSize: 24, color: Colors.blue, fontWeight: FontWeight.bold),
+        //           ),
+        //         ),
+        //         SizedBox(height: 20),
+        //         // _buildName(imageAsset: 'assets/chocolate.jpg', name: "Name 1", score: 1000),
+        //         // _buildName(imageAsset: 'assets/chocolate.jpg', name: "Name 2", score: 2000),
+        //         // _buildName(imageAsset: 'assets/chocolate.jpg', name: "Name 3", score: 3000),
+        //         // _buildName(imageAsset: 'assets/chocolate.jpg', name: "Name 4", score: 4000),
+        //         // _buildName(imageAsset: 'assets/chocolate.jpg', name: "Name 5", score: 5000),
+        //         // _buildName(imageAsset: 'assets/chocolate.jpg', name: "Name 6", score: 6000),
+        //       ],
+        //     ),
+        //   ),
+        // );
+      }
+    );
+    print("finished show dialog");
+  }
   var data;
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
@@ -57,7 +104,9 @@ class _MyAppState extends State<MyApp> {
         markerId: MarkerId('myMarker'),
         draggable: true,
         onTap: () {
-          print('Marker Tapped');
+          print("Before show dialog");
+          _showDialog();
+          print('Marker Tapped in main');
         },
         position: _center));
   }
@@ -93,6 +142,7 @@ class _MyAppState extends State<MyApp> {
                 icon: Icon(Icons.local_post_office),
                 onPressed: () {
                   createRecord();
+                  _showDialog();
                 },
               )
             ]),
