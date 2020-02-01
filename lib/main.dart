@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'google_map_page.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() => runApp(MyApp());
 
@@ -49,9 +50,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   void createRecord() async {
+
+    Position position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+
+    GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
+
     DocumentReference ref = await databaseReference
         .collection("postings")
-        .add({'title': 'Button Post', 'description': 'Eat it flutter!'});
+        .add({'loc': coordinates});
     print(ref.documentID);
     
   }
