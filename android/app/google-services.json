@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "371242030315",
+    "firebase_url": "https://swamphacks2020-a1376.firebaseio.com",
+    "project_id": "swamphacks2020-a1376",
+    "storage_bucket": "swamphacks2020-a1376.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:371242030315:android:1d3b03c1f7b0e41db81aae",
+        "android_client_info": {
+          "package_name": "com.swamphacks.freebeez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "371242030315-ljtjf57f0ffdn1nocd3skuo3vkj0ng6i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyABrl5kVnzT4xm7JtALvVqZeaZmF3RtMkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "371242030315-ljtjf57f0ffdn1nocd3skuo3vkj0ng6i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
