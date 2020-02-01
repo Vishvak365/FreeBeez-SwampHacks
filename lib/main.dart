@@ -28,6 +28,9 @@ class _MyAppState extends State<MyApp> {
           print('Marker Tapped');
         },
         position: _center));
+    allMarkers.add(Marker(
+        markerId: MarkerId('Turlington'),
+        position: LatLng(29.648835, -82.343570)));
   }
 
   @override
