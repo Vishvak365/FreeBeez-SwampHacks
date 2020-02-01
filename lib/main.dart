@@ -15,7 +15,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
@@ -69,27 +68,22 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-          appBar: AppBar(
-            title: Text('Maps Sample App'),
-            backgroundColor: Colors.green[700],
-          ),
-          body: FutureBuilder(
-            builder: (context, snapshot) {
-              if (snapshot != null) {
-                return GoogleMap(
-                  onMapCreated: _onMapCreated,
-                  initialCameraPosition: CameraPosition(
-                    target: LatLng(29.6479375, -82.3440625),
-                    zoom: 18.0,
-                  ),
-                  markers: Set.from(allMarkers),
-                );
-              }
-              return CircularProgressIndicator();
-            },
-            future: getData(),
-          )
-
+        body: FutureBuilder(
+          builder: (context, snapshot) {
+            if (snapshot != null) {
+              return GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(29.6479375, -82.3440625),
+                  zoom: 18.0,
+                ),
+                markers: Set.from(allMarkers),
+              );
+            }
+            return CircularProgressIndicator();
+          },
+          future: getData(),
+        ),
         appBar: AppBar(
             title: Text('FreeBeez'),
             backgroundColor: Colors.blue[700],
@@ -102,7 +96,6 @@ class _MyAppState extends State<MyApp> {
                 },
               )
             ]),
-        
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: 0, // this will be set when a new tab is tapped
           items: [
@@ -116,13 +109,13 @@ class _MyAppState extends State<MyApp> {
             )
           ],
         ),
-          ),
+      ),
     );
   }
 
   void createRecord() async {
-
-    Position position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator()
+        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
 
     GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
 
@@ -130,6 +123,5 @@ class _MyAppState extends State<MyApp> {
         .collection("postings")
         .add({'loc': coordinates});
     print(ref.documentID);
-    
   }
 }
