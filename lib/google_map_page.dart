@@ -62,8 +62,6 @@ class _FreeMapState extends State<FreeMap> {
     _controller.complete(controller);
   }
 
-  var data;
-
   //gets the postings from the database and puts them on the map
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
@@ -73,8 +71,8 @@ class _FreeMapState extends State<FreeMap> {
         for (int i = 0; i < val.documents.length; i++) {
           double lat = (val.documents[i].data["loc"].latitude);
           double lon = ((val.documents[i].data["loc"].longitude));
-          //String title = (val.documents[i].data["title"]);
-          //String description = (val.documents[i].data["description"]);
+          String title = (val.documents[i].data["title"]);
+          String description = (val.documents[i].data["description"]);
           allMarkers.add(
             Marker(
               markerId: MarkerId(i.toString()),
