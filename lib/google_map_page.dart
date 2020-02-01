@@ -93,14 +93,6 @@ class _FreeMapState extends State<FreeMap> {
   void initState() {
     super.initState();
     getData();
-    allMarkers.add(Marker(
-        markerId: MarkerId('myMarker'),
-        draggable: true,
-        onTap: () {
-          print('Marker Tapped');
-        },
-        position: _center));
-
     Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
   }
 }
