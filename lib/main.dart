@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'getData.dart';
+import 'google_map_page.dart';
+import 'package:geolocator/geolocator.dart';
 
 void main() => runApp(MyApp());
 //void main() => runApp(AddDataToFireStore());
@@ -15,6 +15,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
@@ -53,30 +54,6 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     getData();
-    /*
-    getData().then((val) {
-      try {
-        for (int i = 0; i < val.documents.length; i++) {
-          print(allMarkers);
-          double lat = (val.documents[i].data["loc"].latitude);
-          double lon = ((val.documents[i].data["loc"].longitude));
-          String title = (val.documents[i].data["title"]);
-          //String description = (val.documents[i].data["description"]);
-          allMarkers.add(
-            Marker(
-              markerId: MarkerId(title),
-              draggable: true,
-              position: LatLng(lat, lon),
-              //infoWindow: InfoWindow(title: title, snippet: description)),
-            ),
-          );
-        }
-      } catch (e) {
-        print("Out of bounds");
-      }
-    });
-    */
-
     allMarkers.add(Marker(
         markerId: MarkerId('myMarker'),
         draggable: true,
@@ -87,6 +64,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  final databaseReference = Firestore.instance;
+
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
@@ -110,17 +89,47 @@ class _MyAppState extends State<MyApp> {
             },
             future: getData(),
           )
-          /*
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: CameraPosition(
-            target: LatLng(29.6479375, -82.3440625),
-            zoom: 18.0,
-          ),
-          markers: Set.from(allMarkers),
+
+        appBar: AppBar(
+            title: Text('FreeBeez'),
+            backgroundColor: Colors.blue[700],
+            actions: <Widget>[
+              // action button
+              IconButton(
+                icon: Icon(Icons.local_post_office),
+                onPressed: () {
+                  createRecord();
+                },
+              )
+            ]),
+        
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0, // this will be set when a new tab is tapped
+          items: [
+            BottomNavigationBarItem(
+              icon: new Icon(Icons.filter),
+              title: new Text('Filter'),
+            ),
+            BottomNavigationBarItem(
+              icon: new Icon(Icons.local_post_office),
+              title: new Text('Post'),
+            )
+          ],
         ),
-        */
           ),
     );
+  }
+
+  void createRecord() async {
+
+    Position position = await Geolocator().getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
+
+    GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
+
+    DocumentReference ref = await databaseReference
+        .collection("postings")
+        .add({'loc': coordinates});
+    print(ref.documentID);
+    
   }
 }
