@@ -20,24 +20,47 @@ class _MyAppState extends State<MyApp> {
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
 
   void _onMapCreated(GoogleMapController controller) {
-    sleep(const Duration(seconds: 10));
     _controller.complete(controller);
   }
 
   var data;
-  getData() async {
-    return Firestore.instance.collection('postings').getDocuments();
+  Future<dynamic> getData() async {
+    var val = Firestore.instance.collection('postings').getDocuments();
+    val.then((val) {
+      try {
+        print(val.documents.length);
+        for (int i = 0; i < val.documents.length; i++) {
+          double lat = (val.documents[i].data["loc"].latitude);
+          double lon = ((val.documents[i].data["loc"].longitude));
+          String title = (val.documents[i].data["title"]);
+          //String description = (val.documents[i].data["description"]);
+          allMarkers.add(
+            Marker(
+              markerId: MarkerId(title),
+              draggable: true,
+              position: LatLng(lat, lon),
+              //infoWindow: InfoWindow(title: title, snippet: description)),
+            ),
+          );
+        }
+      } catch (e) {
+        print(e);
+      }
+    });
+    return Firestore.instance.collection('testPostings').getDocuments();
   }
 
   void initState() {
     super.initState();
+    getData();
+    /*
     getData().then((val) {
-      data = val.documents;
       try {
-        for (int i = 0; i < data.documents.length; i++) {
-          double lat = (data.documents[i].data["loc"].latitude);
-          double lon = ((data.documents[i].data["loc"].longitude));
-          String title = (data.documents[i].data["title"]);
+        for (int i = 0; i < val.documents.length; i++) {
+          print(allMarkers);
+          double lat = (val.documents[i].data["loc"].latitude);
+          double lon = ((val.documents[i].data["loc"].longitude));
+          String title = (val.documents[i].data["title"]);
           //String description = (val.documents[i].data["description"]);
           allMarkers.add(
             Marker(
@@ -52,6 +75,7 @@ class _MyAppState extends State<MyApp> {
         print("Out of bounds");
       }
     });
+    */
 
     allMarkers.add(Marker(
         markerId: MarkerId('myMarker'),
@@ -66,10 +90,27 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(
-          title: Text('Maps Sample App'),
-          backgroundColor: Colors.green[700],
-        ),
+          appBar: AppBar(
+            title: Text('Maps Sample App'),
+            backgroundColor: Colors.green[700],
+          ),
+          body: FutureBuilder(
+            builder: (context, snapshot) {
+              if (snapshot != null) {
+                return GoogleMap(
+                  onMapCreated: _onMapCreated,
+                  initialCameraPosition: CameraPosition(
+                    target: LatLng(29.6479375, -82.3440625),
+                    zoom: 18.0,
+                  ),
+                  markers: Set.from(allMarkers),
+                );
+              }
+              return CircularProgressIndicator();
+            },
+            future: getData(),
+          )
+          /*
         body: GoogleMap(
           onMapCreated: _onMapCreated,
           initialCameraPosition: CameraPosition(
@@ -78,7 +119,8 @@ class _MyAppState extends State<MyApp> {
           ),
           markers: Set.from(allMarkers),
         ),
-      ),
+        */
+          ),
     );
   }
 }
