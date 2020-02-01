@@ -1,11 +1,12 @@
 import 'dart:async';
-
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'getData.dart';
 
 void main() => runApp(MyApp());
-
+//void main() => runApp(AddDataToFireStore());
 final databaseReference = Firestore.instance;
 
 class MyApp extends StatefulWidget {
@@ -18,35 +19,40 @@ class _MyAppState extends State<MyApp> {
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
 
-  
-
-
-  void createRecord() async {
-  await databaseReference.collection("postings")
-      .document("1")
-      .setData({
-        'title': 'Mastering Flutter',
-        'description': 'Programming Guide for Dart'
-      });
-
-    DocumentReference ref = await databaseReference.collection("postings")
-        .add({
-          'title': 'Flutter in Action',
-          'description': 'Complete Programming Guide to learn Flutter'
-        });
-    print(ref.documentID);
-  }  
-
-
   void _onMapCreated(GoogleMapController controller) {
+    sleep(const Duration(seconds: 10));
     _controller.complete(controller);
-
-    createRecord();
   }
 
+  var data;
+  getData() async {
+    return Firestore.instance.collection('postings').getDocuments();
+  }
 
   void initState() {
     super.initState();
+    getData().then((val) {
+      data = val.documents;
+      try {
+        for (int i = 0; i < data.documents.length; i++) {
+          double lat = (data.documents[i].data["loc"].latitude);
+          double lon = ((data.documents[i].data["loc"].longitude));
+          String title = (data.documents[i].data["title"]);
+          //String description = (val.documents[i].data["description"]);
+          allMarkers.add(
+            Marker(
+              markerId: MarkerId(title),
+              draggable: true,
+              position: LatLng(lat, lon),
+              //infoWindow: InfoWindow(title: title, snippet: description)),
+            ),
+          );
+        }
+      } catch (e) {
+        print("Out of bounds");
+      }
+    });
+
     allMarkers.add(Marker(
         markerId: MarkerId('myMarker'),
         draggable: true,
