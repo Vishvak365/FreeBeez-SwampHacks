@@ -23,6 +23,24 @@ class _MyAppState extends State<MyApp> {
     _controller.complete(controller);
   }
 
+  getLocation() async {
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+    //GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
+    setState(() {
+      allMarkers.clear();
+      final marker = Marker(
+        //icon: BitmapDescriptor.fromAsset("images/Location_dot_blue.png"),
+          markerId: MarkerId("curr_loc"),
+          position: LatLng(position.latitude, position.longitude),
+          infoWindow: InfoWindow(title: 'Your Location'),
+      );
+      allMarkers.add(marker);
+    });
+    print("Updated location");
+  }
+
   var data;
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
@@ -36,7 +54,7 @@ class _MyAppState extends State<MyApp> {
           //String description = (val.documents[i].data["description"]);
           allMarkers.add(
             Marker(
-              markerId: MarkerId(title),
+              markerId: MarkerId("marker2"),
               draggable: true,
               position: LatLng(lat, lon),
               //infoWindow: InfoWindow(title: title, snippet: description)),
@@ -60,6 +78,7 @@ class _MyAppState extends State<MyApp> {
           print('Marker Tapped');
         },
         position: _center));
+    Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) => getLocation());
   }
 
   @override
@@ -74,7 +93,7 @@ class _MyAppState extends State<MyApp> {
               return GoogleMap(
                 onMapCreated: _onMapCreated,
                 initialCameraPosition: CameraPosition(
-                  target: LatLng(29.6479375, -82.3440625),
+                  target: LatLng(29.6479375, -82.3440525),
                   zoom: 18.0,
                 ),
                 markers: Set.from(allMarkers),
@@ -93,6 +112,7 @@ class _MyAppState extends State<MyApp> {
                 icon: Icon(Icons.local_post_office),
                 onPressed: () {
                   createRecord();
+                  getLocation();
                 },
               )
             ]),
