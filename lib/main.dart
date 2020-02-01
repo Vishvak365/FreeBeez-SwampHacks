@@ -1,9 +1,12 @@
 import 'dart:async';
+import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'google_map_page.dart';
 import 'package:geolocator/geolocator.dart';
+
+import 'icon_creator.dart';
 
 void main() => runApp(MyApp());
 //void main() => runApp(AddDataToFireStore());
@@ -31,14 +34,14 @@ class _MyAppState extends State<MyApp> {
     setState(() {
       allMarkers.clear();
       final marker = Marker(
-        //icon: BitmapDescriptor.fromAsset("images/Location_dot_blue.png"),
+        icon: BitmapDescriptor.defaultMarkerWithHue(270.00),
           markerId: MarkerId("curr_loc"),
           position: LatLng(position.latitude, position.longitude),
           infoWindow: InfoWindow(title: 'Your Location'),
       );
       allMarkers.add(marker);
     });
-    print("Updated location");
+    //print("Updated location");
   }
 
   var data;
@@ -78,7 +81,7 @@ class _MyAppState extends State<MyApp> {
           print('Marker Tapped');
         },
         position: _center));
-    Timer timer = Timer.periodic(Duration(seconds: 5), (Timer t) => getLocation());
+    Timer timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
   }
 
   @override
