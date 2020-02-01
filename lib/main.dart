@@ -13,7 +13,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> allMarkers = [];
-  static const LatLng _center = const LatLng(45.521563, -122.677433);
+  static const LatLng _center = const LatLng(29.6479375, -82.3440625);
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -27,7 +27,7 @@ class _MyAppState extends State<MyApp> {
         onTap: () {
           print('Marker Tapped');
         },
-        position: LatLng(29.6479375, -82.3440625)));
+        position: _center));
   }
 
   @override
