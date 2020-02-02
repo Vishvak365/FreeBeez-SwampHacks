@@ -31,10 +31,11 @@ class PostForm {
           'desc': this.desc,
           'item_code': 3, 
           'loc': coordinates, 
-          'imageKey': globalVar.imagePath, 
+          'imageURL': globalVar.imagePath, 
           'rating': 0, 
           'meeting_required': false,
           'signing_required': false,
+          //'posting_time': Timestamp(Date.now())
           });
   }
 }

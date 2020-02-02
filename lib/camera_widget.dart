@@ -33,11 +33,11 @@ class _ImagePickState extends State<ImagePick> {
         FirebaseStorage.instance.ref().child('images/' + path);
     StorageUploadTask uploadTask = fbsRef.putFile(image);
     StorageTaskSnapshot taskSnapshots = await uploadTask.onComplete;
-    //String downloadUrl = await taskSnapshots.ref.getDownloadURL();
+    String downloadUrl = await taskSnapshots.ref.getDownloadURL();
 
     setState(() {
       print(path);
-      globalVar.imagePath = path;
+      globalVar.imagePath = downloadUrl;
     });
     
   }
