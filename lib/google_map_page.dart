@@ -17,7 +17,7 @@ class _FreeMapState extends State<FreeMap> {
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
-  BitmapDescriptor userIcon;
+  BitmapDescriptor userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -76,16 +76,20 @@ class _FreeMapState extends State<FreeMap> {
           double lon = ((val.documents[i].data["loc"].longitude));
           String title = (val.documents[i].data["title"]);
           String description = (val.documents[i].data["desc"]);
+          int itemCode = (val.documents[i].data["itemCode"]);
+
           allMarkers.add(
             Marker(
-                markerId: MarkerId(i.toString()),
-                draggable: true,
-                position: LatLng(lat, lon),
-                onTap: () {
-                  locationInfoPopUp(context, title, description, image_url);
-                }
-                //infoWindow: InfoWindow(title: title, snippet: description)),
-                ),
+              markerId: MarkerId(i.toString()),
+              draggable: true,
+              position: LatLng(lat, lon),
+              onTap: () {
+                locationInfoPopUp(context, title, description, image_url);
+                print(IconHelper().itemTypeToString(itemCode));
+              },
+              icon: BitmapDescriptor.fromAsset(IconHelper().itemTypeToString(itemCode)),
+              //infoWindow: InfoWindow(title: title, snippet: description)),
+            ),
           );
         }
       } catch (e) {
@@ -100,18 +104,7 @@ class _FreeMapState extends State<FreeMap> {
   void initState() {
     super.initState();
     getData();
-
-    IconHelper iconHelper;
-    //String userIconString = iconHelper.getUserIconString();
-    userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
-    allMarkers.add(Marker(
-        markerId: MarkerId('myMarker'),
-        draggable: true,
-        onTap: () {
-          print('Marker Tapped');
-        },
-        position: _center));
-
     Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
+    //Timer.periodic(Duration(seconds: 10), (Timer t) => getData()); //!NEW
   }
 }

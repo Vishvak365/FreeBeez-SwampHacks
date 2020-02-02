@@ -15,6 +15,7 @@ locationInfoPopUp(
               children: <Widget>[
                 Image.network(
                   image_url,
+                  width: MediaQuery.of(context).size.width,
                 ),
                 Text(description),
               ],
