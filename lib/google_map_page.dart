@@ -24,14 +24,21 @@ class _FreeMapState extends State<FreeMap> {
     return FutureBuilder(
       builder: (context, snapshot) {
         if (snapshot != null) {
-          return GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 18.0,
+          return Center(
+              child: Card(
+            child: Container(
+              height: MediaQuery.of(context).size.height * .9,
+              width: MediaQuery.of(context).size.width * .9,
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 18.0,
+                ),
+                markers: Set.from(allMarkers),
+              ),
             ),
-            markers: Set.from(allMarkers),
-          );
+          ));
         }
         return CircularProgressIndicator();
       },
@@ -107,18 +114,7 @@ class _FreeMapState extends State<FreeMap> {
   void initState() {
     super.initState();
     getData();
-
-    IconHelper iconHelper;
-    //String userIconString = iconHelper.getUserIconString();
     userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
-    allMarkers.add(Marker(
-        markerId: MarkerId('myMarker'),
-        draggable: true,
-        onTap: () {
-          //print('Marker Tapped');
-        },
-        position: _center));
-
     Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
   }
 }
