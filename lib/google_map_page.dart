@@ -6,6 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:freebeezswamphacks/pop_ups/freeBeezLocationInfo.dart';
 import 'iconHelper.dart';
 import 'freebee.dart';
+import 'package:freebeezswamphacks/globals.dart' as globalVar;
+
 
 final databaseReference = Firestore.instance;
 
@@ -84,6 +86,20 @@ class _FreeMapState extends State<FreeMap> {
 
   }
 
+  // int CountNearby(List<Marker> markers, Position pos){ //if we need to count how many markers are near the user.
+  //   int count = 0;
+
+  //   for(int i = 0; i < markers.length; i++){
+  //     if(markers[i].position.latitude - pos.latitude < 0.0075 && markers[i].position.latitude - pos.latitude > -0.0075){ //check if latitudes are 0.0075degrees within each other
+  //       if(markers[i].position.longitude - pos.longitude < 0.0075 && markers[i].position.longitude - pos.longitude > -0.0075){
+  //         count++;
+  //       }
+  //     }
+  //   }
+
+  //   return count;
+  // }
+
   //gets the postings from the database and puts them on the map
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
@@ -133,13 +149,6 @@ class _FreeMapState extends State<FreeMap> {
     IconHelper iconHelper;
     //String userIconString = iconHelper.getUserIconString();
     userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
-    allMarkers.add(Marker(
-        markerId: MarkerId('myMarker'),
-        draggable: true,
-        onTap: () {
-          //print('Marker Tapped');
-        },
-        position: _center));
 
     Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
   }
