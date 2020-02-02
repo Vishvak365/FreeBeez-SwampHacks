@@ -5,6 +5,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:freebeezswamphacks/pop_ups/freeBeezLocationInfo.dart';
 import 'iconHelper.dart';
+import 'freebee.dart';
 
 final databaseReference = Firestore.instance;
 
@@ -69,30 +70,38 @@ class _FreeMapState extends State<FreeMap> {
     var val = Firestore.instance.collection('postings').getDocuments();
     val.then((val) {
       try {
-        print(val.documents.length);
+        //print(val.documents.length);
         for (int i = 0; i < val.documents.length; i++) {
+          Freebee freebee;
+          freebee.createFromDB(val.documents[i].data);
+
+          /*
           double lat = (val.documents[i].data["loc"].latitude);
           double lon = ((val.documents[i].data["loc"].longitude));
           String title = (val.documents[i].data["title"]);
           String description = (val.documents[i].data["desc"]);
+*/
+
           allMarkers.add(
             Marker(
                 markerId: MarkerId(i.toString()),
                 draggable: true,
-                position: LatLng(lat, lon),
+                position: LatLng(freebee.coordinates.latitude,
+                    freebee.coordinates.longitude),
                 onTap: () {
-                  locationInfoPopUp(context,title,description);
+                  locationInfoPopUp(context, freebee);
                 }
                 //infoWindow: InfoWindow(title: title, snippet: description)),
                 ),
           );
         }
       } catch (e) {
-        print(e);
+        //print(e);
       }
     });
     return Firestore.instance.collection('postings').getDocuments();
   }
+
   BitmapDescriptor customIcon;
   //when the app boots up create the map and draw all the markers on the mapp
   void initState() {
@@ -104,9 +113,9 @@ class _FreeMapState extends State<FreeMap> {
     userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
     allMarkers.add(Marker(
         markerId: MarkerId('myMarker'),
-        draggable: true,  
+        draggable: true,
         onTap: () {
-          print('Marker Tapped');
+          //print('Marker Tapped');
         },
         position: _center));
 

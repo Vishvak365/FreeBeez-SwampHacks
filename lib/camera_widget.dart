@@ -5,7 +5,6 @@ import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:freebeezswamphacks/globals.dart' as globalVar;
 
-
 class ImagePick extends StatefulWidget {
   @override
   _ImagePickState createState() => _ImagePickState();
@@ -24,40 +23,31 @@ class _ImagePickState extends State<ImagePick> {
     uploadPic(image);
   }
 
-
-  Future uploadPic(image) async {
+  Future<String> uploadPic(image) async {
     String path = basename(image.path);
-
 
     StorageReference fbsRef =
         FirebaseStorage.instance.ref().child('images/' + path);
     StorageUploadTask uploadTask = fbsRef.putFile(image);
     StorageTaskSnapshot taskSnapshots = await uploadTask.onComplete;
     //String downloadUrl = await taskSnapshots.ref.getDownloadURL();
-
-    setState(() {
-      print(path);
-      globalVar.imagePath = path;
-    });
-    
+    return path;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Image Picker Example'),
-      ),
-      body: Center(
-        child: _image == null
-            ? Text('No image selected.')
-            : Image.file(_image),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: getImage,
-        tooltip: 'Pick Image',
-        child: Icon(Icons.add_a_photo),
-      )
-    );
+        appBar: AppBar(
+          title: Text('Select an Image'),
+        ),
+        body: Center(
+          child:
+              _image == null ? Text('No image selected.') : Image.file(_image),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: getImage ,
+          tooltip: 'Pick Image',
+          child: Icon(Icons.add_a_photo),
+        ));
   }
 }
