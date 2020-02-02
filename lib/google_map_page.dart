@@ -96,8 +96,8 @@ class _FreeMapState extends State<FreeMap> {
     super.initState();
     getData();
 
-    IconHelper iconHelper;
-    userIcon = BitmapDescriptor.fromAsset(iconHelper.userIconString);
+    //IconHelper iconHelper;
+    userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
     allMarkers.add(Marker(
         markerId: MarkerId('myMarker'),
         draggable: true,  
