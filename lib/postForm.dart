@@ -119,6 +119,7 @@ class _PostPageState extends State<PostPage> {
                     if (form.validate()) {
                       form.save();
                       _post.getGPS().then((position) => _post.save(position));
+                      Navigator.of(context).pop();
                     }
                   },
                   child: Text('Submit'),
