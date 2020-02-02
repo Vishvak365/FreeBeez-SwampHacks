@@ -21,17 +21,4 @@ class _MyAppState extends State<MyApp> {
       home: HomePage(),
     );
   }
-
-  void createRecord() async {
-    Position position = await Geolocator()
-        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-    print(position);
-    GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
-
-    print(coordinates);
-    DocumentReference ref = await databaseReference
-        .collection("postings")
-        .add({'loc': coordinates});
-    print(ref.documentID);
-  }
 }
