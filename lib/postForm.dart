@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'camera_widget.dart';
 
 final db = Firestore.instance;
 
@@ -83,6 +84,19 @@ class _PostPageState extends State<PostPage> {
 
               Text(
                   'Location: My Location'), //to-do: put in dynamic location selection for user (currentl defaults to their phone's GPS coords)
+              Container(
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 16.0),
+                child: RaisedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ImagePick()),
+                    );
+                  },
+                  child: Text('Upload a picture!'),
+                ),
+              ),
               Container(
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 16.0),

@@ -1,39 +1,58 @@
-import 'dart:async';
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:camera/camera.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:path/path.dart';
+import 'package:image_picker/image_picker.dart';
 
-List<CameraDescription> cameras;
-
-class CameraPage extends StatefulWidget {
+class ImagePick extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() {
-    return _CameraPageState();
-  }
+  _ImagePickState createState() => _ImagePickState();
 }
 
-class _CameraPageState extends State<CameraPage> {
-  CameraController controller;
+class _ImagePickState extends State<ImagePick> {
+  File _image;
 
-  @override
-  void initState() {
-    super.initState();
-    controller = CameraController(cameras[0], ResolutionPreset.medium);
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+
+    setState(() {
+      _image = image;
+    });
+
+    uploadPic(image);
+  }
+
+
+  Future uploadPic(File image) async {
+    String fileName = basename(image.path);
+    StorageReference fbsRef =
+        FirebaseStorage.instance.ref().child('images/' + fileName);
+    StorageUploadTask uploadTask = fbsRef.putFile(image);
+    StorageTaskSnapshot taskSnapshots = await uploadTask.onComplete;
+    setState(() {
+      print("Freebee Picture uploaded");
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return Container();
-    }
-    return AspectRatio(
-        aspectRatio:
-        controller.value.aspectRatio,
-        child: CameraPreview(controller));
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Image Picker Example'),
+      ),
+      body: Center(
+        child: _image == null
+            ? Text('No image selected.')
+            : Image.file(_image),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: getImage,
+        tooltip: 'Pick Image',
+        child: Icon(Icons.add_a_photo),
+      )
+    );
   }
 }
