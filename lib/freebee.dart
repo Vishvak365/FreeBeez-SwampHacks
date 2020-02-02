@@ -8,22 +8,23 @@ class Freebee {
   String desc;
   GeoPoint coordinates;
   int itemCode;
-  bool meetingRequired;
-  bool signingRequired;
+  bool meetingRequired = false;
+  bool signingRequired = false;
   String imageURL;
-  int rating;
+  int rating = 0;
   Timestamp postingTime;
 
   createFromDB(Map<String, dynamic> data) {
-    this.title = data["title"];
-    this.desc = data["desc"];
-    this.coordinates = data["loc"];
-    this.itemCode = data["itemCode"];
-    this.meetingRequired = data["meetingRequired"];
-    this.signingRequired = data["signingRequired"];
-    this.imageURL = data["imageURL"];
-    this.rating = data["rating"];
-    this.postingTime = data["postingTime"];
+    this.title = (data.containsKey("title")) ? data["title"] : null;
+    this.desc = (data.containsKey("desc")) ? data["desc"] : null;
+    this.coordinates = (data.containsKey("loc")) ? data["loc"] : null;
+    this.itemCode = (data.containsKey("itemCode")) ? data["itemCode"] : null;
+    this.meetingRequired = (data.containsKey("meetingRequired")) ? data["meetingRequired"] : null;
+    this.signingRequired = (data.containsKey("signingRequired")) ? data["signingRequired"] : null;
+    this.imageURL = (data.containsKey("imageURL")) ? data["imageURL"] : null;
+    this.rating = (data.containsKey("rating")) ? data["rating"] : null;
+    this.postingTime =
+        (data.containsKey("postingTime")) ? data["postingTime"] : null;
   }
 
   Future<void> updateGPS() async {

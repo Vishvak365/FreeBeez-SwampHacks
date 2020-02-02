@@ -91,10 +91,14 @@ class _FreeMapState extends State<FreeMap> {
       try {
         //print(val.documents.length);
         for (int i = 0; i < val.documents.length; i++) {
-          Freebee freebee;
-          freebee.createFromDB(val.documents[i].data);
-          bool remove = RemoveIfOutdated(freebee, val.documents[i].documentID);
-
+          bool remove = false;
+          Freebee freebee = Freebee();
+          try {
+            freebee.createFromDB(val.documents[i].data);
+            remove = RemoveIfOutdated(freebee, val.documents[i].documentID);
+          } catch (error) {
+            print(error);
+          }
           
           if(!remove){
             allMarkers.add(
