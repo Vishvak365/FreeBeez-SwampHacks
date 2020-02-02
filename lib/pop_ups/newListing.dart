@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:freebeezswamphacks/postForm.dart';
 
 dialogBox(BuildContext context) {
@@ -12,7 +11,7 @@ dialogBox(BuildContext context) {
         content: SingleChildScrollView(child: PostPage()),
         actions: <Widget>[
           FlatButton(
-            child: Text('Regret'),
+            child: Text('Cancel'),
             onPressed: () {
               Navigator.of(context).pop();
             },
