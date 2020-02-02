@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freebeezswamphacks/freebee.dart';
+import 'package:share/share.dart';
 
 locationInfoPopUp(BuildContext context, Freebee item) {
   return showDialog<void>(
@@ -10,13 +11,23 @@ locationInfoPopUp(BuildContext context, Freebee item) {
         title: Text(item.title),
         content: SingleChildScrollView(
           child: Container(
-            color: Colors.blue,
             child: Column(
               children: <Widget>[
-                Image.network(
-                  item.imageURL,
+                Container(
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 10),
+                  child: Image.network(
+                    item.imageURL,
+                  ),
                 ),
-                Text(item.desc),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text("Description: ${item.desc}"),
+                ),
+                Container(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                      "Meeting Required: ${item.meetingRequired.toString() == 'true' ? 'yes' : 'no'}"),
+                )
               ],
             ),
           ),
