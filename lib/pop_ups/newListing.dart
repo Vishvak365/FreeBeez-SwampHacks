@@ -11,7 +11,7 @@ dialogBox(BuildContext context) {
         content: SingleChildScrollView(child: PostPage()),
         actions: <Widget>[
           FlatButton(
-            child: Text('Cancel'),
+            child: Text('Exit'),
             onPressed: () {
               Navigator.of(context).pop();
             },

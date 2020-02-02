@@ -1,11 +1,10 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:path/path.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:freebeezswamphacks/globals.dart' as globalVar;
+
 
 class ImagePick extends StatefulWidget {
   @override
@@ -26,15 +25,21 @@ class _ImagePickState extends State<ImagePick> {
   }
 
 
-  Future uploadPic(File image) async {
-    String fileName = basename(image.path);
+  Future uploadPic(image) async {
+    String path = basename(image.path);
+
+
     StorageReference fbsRef =
-        FirebaseStorage.instance.ref().child('images/' + fileName);
+        FirebaseStorage.instance.ref().child('images/' + path);
     StorageUploadTask uploadTask = fbsRef.putFile(image);
     StorageTaskSnapshot taskSnapshots = await uploadTask.onComplete;
+    //String downloadUrl = await taskSnapshots.ref.getDownloadURL();
+
     setState(() {
-      print("Freebee Picture uploaded");
+      print(path);
+      globalVar.imagePath = path;
     });
+    
   }
 
   @override
