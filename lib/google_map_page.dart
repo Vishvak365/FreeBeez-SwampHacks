@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:freebeezswamphacks/pop_ups/freeBeezLocationInfo.dart';
 import 'iconHelper.dart';
 
 final databaseReference = Firestore.instance;
@@ -73,14 +74,17 @@ class _FreeMapState extends State<FreeMap> {
           double lat = (val.documents[i].data["loc"].latitude);
           double lon = ((val.documents[i].data["loc"].longitude));
           String title = (val.documents[i].data["title"]);
-          String description = (val.documents[i].data["description"]);
+          String description = (val.documents[i].data["desc"]);
           allMarkers.add(
             Marker(
-              markerId: MarkerId(i.toString()),
-              draggable: true,
-              position: LatLng(lat, lon),
-              //infoWindow: InfoWindow(title: title, snippet: description)),
-            ),
+                markerId: MarkerId(i.toString()),
+                draggable: true,
+                position: LatLng(lat, lon),
+                onTap: () {
+                  locationInfoPopUp(context,title,description);
+                }
+                //infoWindow: InfoWindow(title: title, snippet: description)),
+                ),
           );
         }
       } catch (e) {
