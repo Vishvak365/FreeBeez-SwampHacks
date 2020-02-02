@@ -52,7 +52,11 @@ class _PostPageState extends State<PostPage> {
                     }
                   },
                   onSaved: (val) => setState(() => freebee.desc = val)),
-
+              SwitchListTile(
+                  title: const Text('Do you have to go to a meeting?'),
+                  value: freebee.meetingRequired,
+                  onChanged: (bool val) =>
+                      setState(() => freebee.meetingRequired = val)),
               Container(
                 padding:
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
@@ -77,8 +81,7 @@ class _PostPageState extends State<PostPage> {
                       form.save();
                       Navigator.of(context).pop();
                       freebee.imageURL = globalVar.imagePath;
-                      freebee.updateGPS();
-                      freebee.save();
+                      freebee.updateGPS().then((val) => freebee.save());
                     }
                   },
                   child: Text('Submit'),

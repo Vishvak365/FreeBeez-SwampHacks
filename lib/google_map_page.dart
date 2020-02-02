@@ -6,6 +6,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:freebeezswamphacks/pop_ups/freeBeezLocationInfo.dart';
 import 'iconHelper.dart';
 import 'freebee.dart';
+import 'package:freebeezswamphacks/globals.dart' as globalVar;
+
 
 final databaseReference = Firestore.instance;
 
@@ -25,14 +27,21 @@ class _FreeMapState extends State<FreeMap> {
     return FutureBuilder(
       builder: (context, snapshot) {
         if (snapshot != null) {
-          return GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 18.0,
+          return Center(
+              child: Card(
+            child: Container(
+              height: MediaQuery.of(context).size.height * .9,
+              width: MediaQuery.of(context).size.width * .9,
+              child: GoogleMap(
+                onMapCreated: _onMapCreated,
+                initialCameraPosition: CameraPosition(
+                  target: _center,
+                  zoom: 18.0,
+                ),
+                markers: Set.from(allMarkers),
+              ),
             ),
-            markers: Set.from(allMarkers),
-          );
+          ));
         }
         return CircularProgressIndicator();
       },
@@ -66,28 +75,70 @@ class _FreeMapState extends State<FreeMap> {
     _controller.complete(controller);
   }
 
+
+  //removes old posts from DB, returns true if the document is removed.
+  bool RemoveIfOutdated(Freebee fb, String docID){
+    DateTime today = new DateTime.now();
+
+    DateTime fbTimeCheck = fb.postingTime.toDate().add(Duration(days: 1));
+
+    if(fbTimeCheck.isBefore(today)){
+      Firestore.instance.collection('postings')
+        .document(docID).delete();
+
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  }
+
+  // int CountNearby(List<Marker> markers, Position pos){ //if we need to count how many markers are near the user.
+  //   int count = 0;
+
+  //   for(int i = 0; i < markers.length; i++){
+  //     if(markers[i].position.latitude - pos.latitude < 0.0075 && markers[i].position.latitude - pos.latitude > -0.0075){ //check if latitudes are 0.0075degrees within each other
+  //       if(markers[i].position.longitude - pos.longitude < 0.0075 && markers[i].position.longitude - pos.longitude > -0.0075){
+  //         count++;
+  //       }
+  //     }
+  //   }
+
+  //   return count;
+  // }
+
   //gets the postings from the database and puts them on the map
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
     val.then((val) {
         //print(val.documents.length);
         for (int i = 0; i < val.documents.length; i++) {
-          Freebee freebee;
+          bool remove = false;
+          Freebee freebee = Freebee();
+          try {
             freebee.createFromDB(val.documents[i].data);
-          int itemCode = freebee.itemCode;
-          allMarkers.add(
-            Marker(
-              icon: BitmapDescriptor.fromAsset(iconHelper.itemTypeToString(freebee.itemCode)),
-                markerId: MarkerId(i.toString()),
-                draggable: true,
-                position: LatLng(freebee.coordinates.latitude,
-                    freebee.coordinates.longitude),
-                onTap: () {
-                  //locationInfoPopUp(context, title, description, image_url);
-                }
-                //infoWindow: InfoWindow(title: title, snippet: description)),
-                ),
-          );
+            remove = RemoveIfOutdated(freebee, val.documents[i].documentID);
+          } catch (error) {
+            print(error);
+          }
+
+          if(!remove){
+            allMarkers.add(
+              Marker(
+                  markerId: MarkerId(i.toString()),
+                  draggable: true,
+                  position: LatLng(freebee.coordinates.latitude,
+                      freebee.coordinates.longitude),
+                  onTap: () {
+                    //locationInfoPopUp(context, freebee);
+                  },
+                  icon: BitmapDescriptor.fromAsset(
+                      IconHelper().itemTypeToString(freebee.itemCode))
+                  //infoWindow: InfoWindow(title: title, snippet: description)),
+                  ),
+            );
+          }
         }
     });
     return Firestore.instance.collection('postings').getDocuments();
@@ -98,18 +149,7 @@ class _FreeMapState extends State<FreeMap> {
   void initState() {
     super.initState();
     getData();
-
-    IconHelper iconHelper;
-    //String userIconString = iconHelper.getUserIconString();
     userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
-    allMarkers.add(Marker(
-        markerId: MarkerId('myMarker'),
-        draggable: true,
-        onTap: () {
-          //print('Marker Tapped');
-        },
-        position: _center));
-
     Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
   }
 }
