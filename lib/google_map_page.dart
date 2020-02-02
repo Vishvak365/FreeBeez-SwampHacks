@@ -88,7 +88,9 @@ class _FreeMapState extends State<FreeMap> {
                     freebee.coordinates.longitude),
                 onTap: () {
                   locationInfoPopUp(context, freebee);
-                }
+                },
+                icon: BitmapDescriptor.fromAsset(
+                    IconHelper().itemTypeToString(freebee.itemCode))
                 //infoWindow: InfoWindow(title: title, snippet: description)),
                 ),
           );
