@@ -17,17 +17,24 @@ class _HomeState extends State<HomePage> {
     return Scaffold(
       body: FreeMap(),
       appBar: AppBar(
-        title: Text('FreeBeeez'),
-        backgroundColor: Colors.blue,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.filter),
-            onPressed: () {
-              dialogBox(context);
-            },
-          )
-        ],
+          centerTitle: true,
+          title: Image.asset('assets/images/bee.png'),
+          backgroundColor: Colors.blue,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.filter),
+              onPressed: () {
+                dialogBox(context);
+              },
+            )
+          ]),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          dialogBox(context);
+        },
+        child: Icon(Icons.add),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
