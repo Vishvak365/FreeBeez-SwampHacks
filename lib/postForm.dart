@@ -29,16 +29,17 @@ class PostForm {
         .add({
           'title': this.title, 
           'desc': this.desc,
-          'item_code': 3, 
+          'itemCode': 3, 
           'loc': coordinates, 
           'imageURL': globalVar.imagePath, 
           'rating': 0, 
-          'meeting_required': false,
-          'signing_required': false,
-          //'posting_time': Timestamp(Date.now())
+          'meetingRequired': false,
+          'signingRequired': false,
+          //'postingTime': Timestamp(Date.now())
           });
   }
 }
+
 
 class Freebee {
   String title = '';
