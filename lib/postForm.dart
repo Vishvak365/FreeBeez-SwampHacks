@@ -2,62 +2,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'camera_widget.dart';
+import 'freebee.dart';
 import 'package:freebeezswamphacks/globals.dart' as globalVar;
 
 final db = Firestore.instance;
+
 class PostPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _PostPageState();
   }
 }
-class PostForm {
-  String title = '';
-  String desc = '';
-
-
-  Future<Position> getGPS() {
-    return Geolocator()
-        .getLastKnownPosition(desiredAccuracy: LocationAccuracy.high);
-  }
-
-  Future<void> save(Position position) {
-    GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
-
-    return db
-        .collection("postings")
-        .add({
-          'title': this.title, 
-          'desc': this.desc,
-          'itemCode': 3, 
-          'loc': coordinates, 
-          'imageURL': globalVar.imagePath, 
-          'rating': 0, 
-          'meetingRequired': false,
-          'signingRequired': false,
-          'postingTime': Timestamp.now(),
-          });
-  }
-}
-
-
-class Freebee {
-  String title = '';
-  String desc = '';
-  GeoPoint coordinates;
-
-  Freebee({this.title, this.desc, this.coordinates});
-
-  Map<String, dynamic> toJson() => {
-        'title': title,
-        'desc': desc,
-        'coordinates': coordinates
-      };
-}
 
 class _PostPageState extends State<PostPage> {
   final GlobalKey<FormState> _formKey = new GlobalKey<FormState>();
-  final _post = PostForm();
+  final freebee = Freebee();
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +41,7 @@ class _PostPageState extends State<PostPage> {
                       return 'Please enter a title';
                     }
                   },
-                  onSaved: (val) => setState(() => _post.title = val)),
+                  onSaved: (val) => setState(() => freebee.title = val)),
               TextFormField(
                   //defines a field
                   decoration: InputDecoration(labelText: 'Description'),
@@ -92,16 +51,13 @@ class _PostPageState extends State<PostPage> {
                       return 'Please enter a description';
                     }
                   },
-                  onSaved: (val) => setState(() => _post.desc = val)),
+                  onSaved: (val) => setState(() => freebee.desc = val)),
 
-              Text(
-                  'Location: My Location'), //to-do: put in dynamic location selection for user (currentl defaults to their phone's GPS coords)
               Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 16.0, horizontal: 16.0),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 child: RaisedButton(
                   onPressed: () {
-                    globalVar.imagePath = "";
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ImagePick()),
@@ -114,12 +70,15 @@ class _PostPageState extends State<PostPage> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 16.0),
                 child: RaisedButton(
+                  //the submit button
                   onPressed: () {
                     final form = _formKey.currentState;
                     if (form.validate()) {
                       form.save();
-                      _post.getGPS().then((position) => _post.save(position));
                       Navigator.of(context).pop();
+                      freebee.imageURL = globalVar.imagePath;
+                      freebee.updateGPS();
+                      freebee.save();
                     }
                   },
                   child: Text('Submit'),
