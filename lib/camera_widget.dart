@@ -26,12 +26,13 @@ class _ImagePickState extends State<ImagePick> {
   }
 
 
-  Future uploadPic(File image) async {
-    String fileName = basename(image.path);
+  Future uploadPic(image) async {
     StorageReference fbsRef =
-        FirebaseStorage.instance.ref().child('images/' + fileName);
+        FirebaseStorage.instance.ref().child('images/' + basename(image.path));
     StorageUploadTask uploadTask = fbsRef.putFile(image);
     StorageTaskSnapshot taskSnapshots = await uploadTask.onComplete;
+    String downloadUrl = await taskSnapshots.ref.getDownloadURL();
+
     setState(() {
       print("Freebee Picture uploaded");
     });
