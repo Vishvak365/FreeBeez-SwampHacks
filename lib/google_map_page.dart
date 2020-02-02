@@ -21,6 +21,7 @@ class _FreeMapState extends State<FreeMap> {
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
   BitmapDescriptor userIcon;
+  IconHelper iconHelper = new IconHelper();
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -111,7 +112,6 @@ class _FreeMapState extends State<FreeMap> {
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
     val.then((val) {
-      try {
         //print(val.documents.length);
         for (int i = 0; i < val.documents.length; i++) {
           bool remove = false;
@@ -140,9 +140,6 @@ class _FreeMapState extends State<FreeMap> {
             );
           }
         }
-      } catch (e) {
-        //print(e);
-      }
     });
     return Firestore.instance.collection('postings').getDocuments();
   }
