@@ -131,7 +131,7 @@ class _FreeMapState extends State<FreeMap> {
                   position: LatLng(freebee.coordinates.latitude,
                       freebee.coordinates.longitude),
                   onTap: () {
-                    //locationInfoPopUp(context, freebee);
+                    locationInfoPopUp(context, freebee);
                   },
                   icon: BitmapDescriptor.fromAsset(
                       IconHelper().itemTypeToString(freebee.itemCode))
