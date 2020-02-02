@@ -124,8 +124,7 @@ class _FreeMapState extends State<FreeMap> {
           }
 
           if(!remove){
-            allMarkers.add(
-              Marker(
+            Marker newMarker = Marker(
                   markerId: MarkerId(i.toString()),
                   draggable: true,
                   position: LatLng(freebee.coordinates.latitude,
@@ -136,8 +135,8 @@ class _FreeMapState extends State<FreeMap> {
                   icon: BitmapDescriptor.fromAsset(
                       IconHelper().itemTypeToString(freebee.itemCode))
                   //infoWindow: InfoWindow(title: title, snippet: description)),
-                  ),
-            );
+                  );
+            allMarkers.add(newMarker);
           }
         }
     });
