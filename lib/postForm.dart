@@ -97,15 +97,11 @@ class PostForm {
   }
 
   Future<void> save(Position position) {
-    /*
+    
     GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
     return db
         .collection("postings")
         .add({'title': this.title, 'desc': this.desc, 'loc': coordinates});
-        */
-    return db
-        .collection("postings")
-        .add({'title': this.title, 'desc': this.desc});
   }
 }
 
