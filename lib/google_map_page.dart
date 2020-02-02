@@ -90,7 +90,6 @@ class _FreeMapState extends State<FreeMap> {
     return Firestore.instance.collection('postings').getDocuments();
   }
   BitmapDescriptor customIcon;
-
   //when the app boots up create the map and draw all the markers on the mapp
   void initState() {
     super.initState();
