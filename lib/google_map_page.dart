@@ -72,6 +72,25 @@ class _FreeMapState extends State<FreeMap> {
     _controller.complete(controller);
   }
 
+
+  //removes old posts from DB, returns true if the document is removed.
+  bool RemoveIfOutdated(Freebee fb, String docID){
+    DateTime today = new DateTime.now();
+
+    DateTime fbTimeCheck = fb.postingTime.toDate().add(Duration(days: 1));
+
+    if(fbTimeCheck.isBefore(today)){
+      Firestore.instance.collection('postings')
+        .document(docID).delete();
+
+      return true;
+    }
+    else{
+      return false;
+    }
+
+  }
+
   //gets the postings from the database and puts them on the map
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
@@ -79,28 +98,31 @@ class _FreeMapState extends State<FreeMap> {
       try {
         //print(val.documents.length);
         for (int i = 0; i < val.documents.length; i++) {
+          bool remove = false;
           Freebee freebee = Freebee();
-
           try {
             freebee.createFromDB(val.documents[i].data);
+            remove = RemoveIfOutdated(freebee, val.documents[i].documentID);
           } catch (error) {
             print(error);
           }
 
-          allMarkers.add(
-            Marker(
-                markerId: MarkerId(i.toString()),
-                draggable: true,
-                position: LatLng(freebee.coordinates.latitude,
-                    freebee.coordinates.longitude),
-                onTap: () {
-                  locationInfoPopUp(context, freebee);
-                },
-                icon: BitmapDescriptor.fromAsset(
-                    IconHelper().itemTypeToString(freebee.itemCode))
-                //infoWindow: InfoWindow(title: title, snippet: description)),
-                ),
-          );
+          if(!remove){
+            allMarkers.add(
+              Marker(
+                  markerId: MarkerId(i.toString()),
+                  draggable: true,
+                  position: LatLng(freebee.coordinates.latitude,
+                      freebee.coordinates.longitude),
+                  onTap: () {
+                    locationInfoPopUp(context, freebee);
+                  },
+                  icon: BitmapDescriptor.fromAsset(
+                      IconHelper().itemTypeToString(freebee.itemCode))
+                  //infoWindow: InfoWindow(title: title, snippet: description)),
+                  ),
+            );
+          }
         }
       } catch (e) {
         //print(e);
