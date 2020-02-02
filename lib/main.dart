@@ -2,16 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'home_widget.dart';
 
-void main() => runApp(MyApp()
-    // MaterialApp(
-    //   title: "RaisedButton",
-    //   home: MyApp(),
-    //   debugShowCheckedModeBanner: false,
-    //   darkTheme: ThemeData(
-    //     brightness: Brightness.dark,
-    //   ),
-    // ),
-    );
+void main() => runApp(MyApp());
 //void main() => runApp(AddDataToFireStore());
 final databaseReference = Firestore.instance;
 
