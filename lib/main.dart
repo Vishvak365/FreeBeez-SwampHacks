@@ -1,10 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'home_widget.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:rflutter_alert/rflutter_alert.dart';
 
-void main() => runApp(MaterialApp(title: "RaisedButton", home: MyApp()));
+void main() => runApp(MyApp()
+    // MaterialApp(
+    //   title: "RaisedButton",
+    //   home: MyApp(),
+    //   debugShowCheckedModeBanner: false,
+    //   darkTheme: ThemeData(
+    //     brightness: Brightness.dark,
+    //   ),
+    // ),
+    );
 //void main() => runApp(AddDataToFireStore());
 final databaseReference = Firestore.instance;
 
@@ -17,6 +24,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'FreeBeez',
       home: HomePage(),
     );
