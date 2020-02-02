@@ -25,6 +25,7 @@ dependencies:
   google_maps_flutter: ^0.4.0
   firebase_storage: ^3.1.1
   image_picker: ^0.6.3+1
+  flutter_launcher_icons: ^0.7.4
 
   http: ^0.12.0+1
   json_serializable: ^2.0.2
@@ -41,6 +42,11 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/icon/icon.png"
 
 # The following section is specific to Flutter.
 flutter:
