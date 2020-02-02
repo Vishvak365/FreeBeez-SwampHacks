@@ -14,7 +14,7 @@ class _ImagePickState extends State<ImagePick> {
   File _image;
 
   Future<dynamic> getImage(BuildContext context) async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    var image = await ImagePicker.pickImage(source: ImageSource.camera, maxHeight: 480, maxWidth: 640);
 
     setState(() {
       _image = image;
