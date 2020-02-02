@@ -19,10 +19,8 @@ class Freebee {
     this.desc = (data.containsKey("desc")) ? data["desc"] : null;
     this.coordinates = (data.containsKey("loc")) ? data["loc"] : null;
     this.itemCode = (data.containsKey("itemCode")) ? data["itemCode"] : null;
-    this.meetingRequired =
-        (data.containsKey("meetingRequired")) ? data["meetingRequired"] : null;
-    this.signingRequired =
-        (data.containsKey("signingRequired")) ? data["signingRequired"] : null;
+    this.meetingRequired = (data.containsKey("meetingRequired")) ? data["meetingRequired"] : null;
+    this.signingRequired = (data.containsKey("signingRequired")) ? data["signingRequired"] : null;
     this.imageURL = (data.containsKey("imageURL")) ? data["imageURL"] : null;
     this.rating = (data.containsKey("rating")) ? data["rating"] : null;
     this.postingTime =
