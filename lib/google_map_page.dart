@@ -72,7 +72,7 @@ class _FreeMapState extends State<FreeMap> {
 
     DateTime fbTimeCheck = fb.postingTime.toDate().add(Duration(days: 1));
 
-    if(fbTimeCheck.isAfter(today)){
+    if(fbTimeCheck.isBefore(today)){
       Firestore.instance.collection('postings')
         .document(docID).delete();
 
