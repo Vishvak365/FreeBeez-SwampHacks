@@ -75,13 +75,6 @@ class _FreeMapState extends State<FreeMap> {
           Freebee freebee;
           freebee.createFromDB(val.documents[i].data);
 
-          /*
-          double lat = (val.documents[i].data["loc"].latitude);
-          double lon = ((val.documents[i].data["loc"].longitude));
-          String title = (val.documents[i].data["title"]);
-          String description = (val.documents[i].data["desc"]);
-*/
-
           allMarkers.add(
             Marker(
                 markerId: MarkerId(i.toString()),

@@ -77,8 +77,7 @@ class _PostPageState extends State<PostPage> {
                       form.save();
                       Navigator.of(context).pop();
                       freebee.imageURL = globalVar.imagePath;
-                      freebee.updateGPS();
-                      freebee.save();
+                      freebee.updateGPS().then((val) => freebee.save());
                     }
                   },
                   child: Text('Submit'),
