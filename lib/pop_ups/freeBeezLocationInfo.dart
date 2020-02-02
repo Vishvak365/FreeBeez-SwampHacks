@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-locationInfoPopUp(BuildContext context,String title, String description) {
+locationInfoPopUp(
+    BuildContext context, String title, String description, String image_url) {
   return showDialog<void>(
     context: context,
     barrierDismissible: false, // user must tap button!
@@ -12,7 +13,9 @@ locationInfoPopUp(BuildContext context,String title, String description) {
             color: Colors.blue,
             child: Column(
               children: <Widget>[
-                Text(description),
+                Image.network(
+                  image_url,
+                ),
                 Text(description),
               ],
             ),

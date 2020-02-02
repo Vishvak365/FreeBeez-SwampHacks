@@ -71,6 +71,7 @@ class _FreeMapState extends State<FreeMap> {
       try {
         print(val.documents.length);
         for (int i = 0; i < val.documents.length; i++) {
+          String image_url = val.documents[i].data["imageURL"];
           double lat = (val.documents[i].data["loc"].latitude);
           double lon = ((val.documents[i].data["loc"].longitude));
           String title = (val.documents[i].data["title"]);
@@ -81,7 +82,7 @@ class _FreeMapState extends State<FreeMap> {
                 draggable: true,
                 position: LatLng(lat, lon),
                 onTap: () {
-                  locationInfoPopUp(context,title,description);
+                  locationInfoPopUp(context, title, description, image_url);
                 }
                 //infoWindow: InfoWindow(title: title, snippet: description)),
                 ),
@@ -93,6 +94,7 @@ class _FreeMapState extends State<FreeMap> {
     });
     return Firestore.instance.collection('postings').getDocuments();
   }
+
   BitmapDescriptor customIcon;
   //when the app boots up create the map and draw all the markers on the mapp
   void initState() {
@@ -104,7 +106,7 @@ class _FreeMapState extends State<FreeMap> {
     userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
     allMarkers.add(Marker(
         markerId: MarkerId('myMarker'),
-        draggable: true,  
+        draggable: true,
         onTap: () {
           print('Marker Tapped');
         },
