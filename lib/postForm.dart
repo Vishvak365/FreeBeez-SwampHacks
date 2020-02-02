@@ -35,7 +35,7 @@ class PostForm {
           'rating': 0, 
           'meetingRequired': false,
           'signingRequired': false,
-          //'postingTime': Timestamp(Date.now())
+          'postingTime': Timestamp.now(),
           });
   }
 }
