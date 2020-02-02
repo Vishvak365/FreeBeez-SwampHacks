@@ -2,19 +2,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'camera_widget.dart';
+import 'package:freebeezswamphacks/globals.dart' as globalVar;
 
 final db = Firestore.instance;
-
 class PostPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _PostPageState();
   }
 }
-
 class PostForm {
   String title = '';
   String desc = '';
+
 
   Future<Position> getGPS() {
     return Geolocator()
@@ -23,9 +23,19 @@ class PostForm {
 
   Future<void> save(Position position) {
     GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
+
     return db
         .collection("postings")
-        .add({'title': this.title, 'desc': this.desc, 'loc': coordinates});
+        .add({
+          'title': this.title, 
+          'desc': this.desc,
+          'item_code': 3, 
+          'loc': coordinates, 
+          'imageKey': globalVar.imagePath, 
+          'rating': 0, 
+          'meeting_required': false,
+          'signing_required': false,
+          });
   }
 }
 
@@ -39,7 +49,7 @@ class Freebee {
   Map<String, dynamic> toJson() => {
         'title': title,
         'desc': desc,
-        'coordinates': coordinates,
+        'coordinates': coordinates
       };
 }
 
@@ -89,6 +99,7 @@ class _PostPageState extends State<PostPage> {
                     vertical: 16.0, horizontal: 16.0),
                 child: RaisedButton(
                   onPressed: () {
+                    globalVar.imagePath = "";
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ImagePick()),
