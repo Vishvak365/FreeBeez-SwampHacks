@@ -18,6 +18,7 @@ class _FreeMapState extends State<FreeMap> {
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
   BitmapDescriptor userIcon;
+  IconHelper iconHelper = new IconHelper();
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -76,13 +77,15 @@ class _FreeMapState extends State<FreeMap> {
           double lon = ((val.documents[i].data["loc"].longitude));
           String title = (val.documents[i].data["title"]);
           String description = (val.documents[i].data["desc"]);
+          int type = (val.documents[i].data["itemCode"]);
           allMarkers.add(
             Marker(
+              icon: BitmapDescriptor.fromAsset(iconHelper.itemTypeToString(type)),
                 markerId: MarkerId(i.toString()),
                 draggable: true,
                 position: LatLng(lat, lon),
                 onTap: () {
-                  locationInfoPopUp(context, title, description, image_url);
+                  //locationInfoPopUp(context, title, description, image_url);
                 }
                 //infoWindow: InfoWindow(title: title, snippet: description)),
                 ),
