@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
+import 'iconHelper.dart';
 
 final databaseReference = Firestore.instance;
 
@@ -15,7 +16,7 @@ class _FreeMapState extends State<FreeMap> {
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
-  BitmapDescriptor myIcon;
+  BitmapDescriptor userIcon;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -45,7 +46,7 @@ class _FreeMapState extends State<FreeMap> {
       //allMarkers.clear();
 
       final marker = Marker(
-        icon: myIcon,
+        icon: userIcon,
         markerId: MarkerId("curr_loc"),
         position: LatLng(position.latitude, position.longitude),
         infoWindow: InfoWindow(title: 'Your Location'),
@@ -94,8 +95,9 @@ class _FreeMapState extends State<FreeMap> {
   void initState() {
     super.initState();
     getData();
-    myIcon = BitmapDescriptor.fromAsset("assets/Location_dot_blue.png");
-    
+
+    IconHelper iconHelper;
+    userIcon = BitmapDescriptor.fromAsset(iconHelper.userIconString);
     allMarkers.add(Marker(
         markerId: MarkerId('myMarker'),
         draggable: true,  
