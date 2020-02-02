@@ -18,7 +18,7 @@ class _HomeState extends State<HomePage> {
       body: FreeMap(),
       appBar: AppBar(
           centerTitle: true,
-          title: Image.asset('assets/images/bee.png'),
+          title: Image.asset('assets/bee.png'),
           backgroundColor: Colors.blue,
           actions: <Widget>[
             IconButton(
