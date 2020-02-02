@@ -17,6 +17,7 @@ class _FreeMapState extends State<FreeMap> {
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
   BitmapDescriptor userIcon;
+  var iconList;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -38,12 +39,11 @@ class _FreeMapState extends State<FreeMap> {
   }
 
   getLocation() async {
+    //Updates location of the user
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
-    //GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
     setState(() {
-      //allMarkers.clear();
 
       final marker = Marker(
         icon: userIcon,
@@ -95,9 +95,13 @@ class _FreeMapState extends State<FreeMap> {
     super.initState();
     getData();
 
-    IconHelper iconHelper;
+    //IconHelper iconHelper;
     //String userIconString = iconHelper.getUserIconString();
     userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
+    iconList.append(BitmapDescriptor.fromAsset("assets/pizzaIcon.png"));
+    iconList.append(BitmapDescriptor.fromAsset("assets/foodIcon.png"));
+    iconList.append(BitmapDescriptor.fromAsset("assets/swagIcon.png"));
+    iconList.append(BitmapDescriptor.fromAsset("assets/etcIcon.png"));
     allMarkers.add(Marker(
         markerId: MarkerId('myMarker'),
         draggable: true,  
