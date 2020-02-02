@@ -70,21 +70,14 @@ class _FreeMapState extends State<FreeMap> {
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
     val.then((val) {
-      try {
         //print(val.documents.length);
         for (int i = 0; i < val.documents.length; i++) {
           Freebee freebee;
-          freebee.createFromDB(val.documents[i].data);
-
-          /*
-          double lat = (val.documents[i].data["loc"].latitude);
-          double lon = ((val.documents[i].data["loc"].longitude));
-          String title = (val.documents[i].data["title"]);
-          String description = (val.documents[i].data["desc"]);
-          int type = (val.documents[i].data["itemCode"]);
+            freebee.createFromDB(val.documents[i].data);
+          int itemCode = freebee.itemCode;
           allMarkers.add(
             Marker(
-              icon: BitmapDescriptor.fromAsset(iconHelper.itemTypeToString(type)),
+              icon: BitmapDescriptor.fromAsset(iconHelper.itemTypeToString(freebee.itemCode)),
                 markerId: MarkerId(i.toString()),
                 draggable: true,
                 position: LatLng(freebee.coordinates.latitude,
@@ -96,9 +89,6 @@ class _FreeMapState extends State<FreeMap> {
                 ),
           );
         }
-      } catch (e) {
-        //print(e);
-      }
     });
     return Firestore.instance.collection('postings').getDocuments();
   }
