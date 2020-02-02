@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'camera_widget.dart';
 import 'freebee.dart';
+import 'package:freebeezswamphacks/globals.dart' as globalVar;
 
 final db = Firestore.instance;
 
@@ -57,7 +58,6 @@ class _PostPageState extends State<PostPage> {
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 child: RaisedButton(
                   onPressed: () {
-                    
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => ImagePick()),
@@ -69,11 +69,14 @@ class _PostPageState extends State<PostPage> {
               Container(
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 16.0),
-                child: RaisedButton( //the submit button
+                child: RaisedButton(
+                  //the submit button
                   onPressed: () {
                     final form = _formKey.currentState;
                     if (form.validate()) {
                       form.save();
+                      Navigator.of(context).pop();
+                      freebee.imageURL = globalVar.imagePath;
                       freebee.updateGPS();
                       freebee.save();
                     }

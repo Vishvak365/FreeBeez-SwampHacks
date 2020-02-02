@@ -42,7 +42,7 @@ class Freebee {
       'rating': this.rating,
       'meetingRequired': this.meetingRequired,
       'signingRequired': this.signingRequired,
-      'postingTime': this.postingTime
+      'postingTime': Timestamp.now()
     });
   }
 }

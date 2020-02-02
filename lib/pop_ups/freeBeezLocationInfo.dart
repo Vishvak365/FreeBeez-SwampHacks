@@ -13,6 +13,9 @@ locationInfoPopUp(BuildContext context, Freebee item) {
             color: Colors.blue,
             child: Column(
               children: <Widget>[
+                Image.network(
+                  item.imageURL,
+                ),
                 Text(item.desc),
               ],
             ),
