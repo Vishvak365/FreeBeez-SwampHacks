@@ -7,7 +7,7 @@ class Freebee {
   String title;
   String desc;
   GeoPoint coordinates;
-  int itemCode;
+  int itemCode = 0;
   bool meetingRequired = false;
   bool signingRequired = false;
   String imageURL;

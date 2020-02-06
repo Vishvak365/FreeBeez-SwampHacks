@@ -1,6 +1,6 @@
 //var allowedItems  = [true, true, true, true];
 class Filter {
-  List<bool> allowedItems = [true,true, true,true];
+  List<bool> allowedItems = [true, true, true, true];
 
   bool pizza = true;
   bool food = true;

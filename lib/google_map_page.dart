@@ -130,7 +130,8 @@ class _FreeMapState extends State<FreeMap> {
             print(error);
           }
           print("getdata called");
-          if(!remove) {//only add freebees not filtered out
+          bool itemAllowed = widget.filter.allowedItems[freebee.itemCode];
+          if(!remove && itemAllowed) {//only add freebees not filtered out
             Marker newMarker = Marker(
                   markerId: MarkerId(i.toString()),
                   draggable: true,
