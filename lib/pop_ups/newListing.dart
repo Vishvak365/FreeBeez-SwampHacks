@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:freebeezswamphacks/filterForm.dart';
 import 'package:freebeezswamphacks/postForm.dart';
+import 'package:freebeezswamphacks/filter.dart';
 
 dialogBox(BuildContext context) {
   return showDialog<void>(
@@ -21,3 +23,11 @@ dialogBox(BuildContext context) {
     },
   );
 }
+
+// filterBox(BuildContext context, Filter filter) async {
+//   final result = await Navigator.push(
+//     context,
+//     MaterialPageRoute(builder: (context) => FilterPage(filter)),
+//   );
+//   return result;
+// }

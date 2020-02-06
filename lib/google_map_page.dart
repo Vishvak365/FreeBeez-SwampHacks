@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:freebeezswamphacks/pop_ups/freeBeezLocationInfo.dart';
+import 'filter.dart';
 import 'iconHelper.dart';
 import 'freebee.dart';
 import 'package:freebeezswamphacks/globals.dart' as globalVar;
@@ -13,6 +14,11 @@ final databaseReference = Firestore.instance;
 
 class FreeMap extends StatefulWidget {
   @override
+  FreeMap(this.filter)
+  {
+    
+  }
+  final Filter filter;
   _FreeMapState createState() => _FreeMapState();
 }
 
@@ -109,6 +115,7 @@ class _FreeMapState extends State<FreeMap> {
   // }
 
   //gets the postings from the database and puts them on the map
+
   Future<dynamic> getData() async {
     var val = Firestore.instance.collection('postings').getDocuments();
     val.then((val) {
@@ -122,8 +129,8 @@ class _FreeMapState extends State<FreeMap> {
           } catch (error) {
             print(error);
           }
-
-          if(!remove){
+          print("getdata called");
+          if(!remove) {//only add freebees not filtered out
             Marker newMarker = Marker(
                   markerId: MarkerId(i.toString()),
                   draggable: true,
@@ -142,13 +149,48 @@ class _FreeMapState extends State<FreeMap> {
     });
     return Firestore.instance.collection('postings').getDocuments();
   }
-
+  void filterMarkers()
+  {
+    allMarkers.clear();
+    var val = Firestore.instance.collection('postings').getDocuments();
+    val.then((val) {
+        //print(val.documents.length);
+        for (int i = 0; i < val.documents.length; i++) {
+          bool remove = false;
+          Freebee freebee = Freebee();
+          try {
+            freebee.createFromDB(val.documents[i].data);
+            remove = RemoveIfOutdated(freebee, val.documents[i].documentID);
+          } catch (error) {
+            print(error);
+          }
+          print("filter markers called");
+          if(!remove && widget.filter.allowedItems[freebee.itemCode]){//only add freebees not filtered out
+            Marker newMarker = Marker(
+                  markerId: MarkerId(i.toString()),
+                  draggable: true,
+                  position: LatLng(freebee.coordinates.latitude,
+                      freebee.coordinates.longitude),
+                  onTap: () {
+                    locationInfoPopUp(context, freebee);
+                  },
+                  icon: BitmapDescriptor.fromAsset(
+                      IconHelper().itemTypeToString(freebee.itemCode))
+                  //infoWindow: InfoWindow(title: title, snippet: description)),
+                  );
+            allMarkers.add(newMarker);
+          }
+        }
+    });
+  }
   BitmapDescriptor customIcon;
   //when the app boots up create the map and draw all the markers on the mapp
   void initState() {
     super.initState();
     getData();
     userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
-    Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
+    //Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
+    //Timer.periodic(Duration(seconds: 1), (Timer t) => filterMarkers());
+    Timer.periodic(Duration(seconds: 10), (Timer t) => getData());
   }
 }
