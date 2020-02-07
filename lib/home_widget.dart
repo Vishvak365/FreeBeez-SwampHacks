@@ -27,8 +27,9 @@ class _HomeState extends State<HomePage> {
             IconButton(
               icon: Icon(Icons.filter),
               onPressed: () async {
+                 // Open up filter dialog and wait for new filter
                 await filterBox(context, filter);
-                print("returned filter");
+                // Update MapState with new filter
                 setState(() {
                 });
               },

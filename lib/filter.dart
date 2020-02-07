@@ -1,24 +1,25 @@
-//var allowedItems  = [true, true, true, true];
 class Filter {
   List<bool> allowedItems = [true, true, true, true];
-
-  bool pizza = true;
-  bool food = true;
-  bool swag = true;
-  bool etc = true;
-
-  bool itemTypeFilter(int itemtype)
+  bool operator ==(other)
   {
-    switch (itemtype)
+    for (int i = 0; i < this.allowedItems.length; i++)
     {
-      case 0:
-      return pizza;
-      case 1:
-      return food;
-      case 2:
-      return swag;
-      default:
-      return etc;
+      if (allowedItems[i] != other.allowedItems[i])
+        return false;
+    }
+    return true;
+  }
+
+  void setEqualTo(Filter other)
+  {
+    for (int i = 0; i < other.allowedItems.length; i++)
+    {
+      this.allowedItems[i] = other.allowedItems[i];
     }
   }
+
+  @override
+  // TODO: implement hashCode
+  int get hashCode => super.hashCode;
+
 }

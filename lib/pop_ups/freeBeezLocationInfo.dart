@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:freebeezswamphacks/freebee.dart';
-import 'package:share/share.dart';
+//import 'package:share/share.dart';
 
 locationInfoPopUp(BuildContext context, Freebee item) {
   return showDialog<void>(

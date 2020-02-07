@@ -7,22 +7,20 @@ import 'package:freebeezswamphacks/pop_ups/freeBeezLocationInfo.dart';
 import 'filter.dart';
 import 'iconHelper.dart';
 import 'freebee.dart';
-import 'package:freebeezswamphacks/globals.dart' as globalVar;
+//import 'package:freebeezswamphacks/globals.dart' as globalVar;
 
 
 final databaseReference = Firestore.instance;
 
 class FreeMap extends StatefulWidget {
   @override
-  FreeMap(this.filter)
-  {
-    
-  }
+  FreeMap(this.filter); // Map constructor
   final Filter filter;
   _FreeMapState createState() => _FreeMapState();
 }
 
 class _FreeMapState extends State<FreeMap> {
+  Filter previousFilter = new Filter(); // store previous filter so we know when to update
   Completer<GoogleMapController> _controller = Completer();
   List<Marker> allMarkers = [];
   static const LatLng _center = const LatLng(29.6479375, -82.3440625);
@@ -30,6 +28,11 @@ class _FreeMapState extends State<FreeMap> {
   IconHelper iconHelper = new IconHelper();
   @override
   Widget build(BuildContext context) {
+    if (previousFilter != widget.filter)
+    {
+      getData();
+      previousFilter.setEqualTo(widget.filter);
+    }
     return FutureBuilder(
       builder: (context, snapshot) {
         if (snapshot != null) {
@@ -51,28 +54,27 @@ class _FreeMapState extends State<FreeMap> {
         }
         return CircularProgressIndicator();
       },
-      future: getData(),
+      //future: getData(),
     );
   }
 
   getLocation() async {
+    // Get position of user
     Position position = await Geolocator()
         .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 
-    //GeoPoint coordinates = new GeoPoint(position.latitude, position.longitude);
     setState(() {
-      //allMarkers.clear();
-
+      // Create Marker for new user position
       final marker = Marker(
         icon: userIcon,
         markerId: MarkerId("curr_loc"),
         position: LatLng(position.latitude, position.longitude),
         infoWindow: InfoWindow(title: 'Your Location'),
       );
+      // Remove marker for old user location, and add new one
       allMarkers.removeWhere((item) => item.markerId.value == "curr_loc");
       allMarkers.add(marker);
     });
-    //print("Updated location");
   }
 
   //Functions
@@ -83,7 +85,7 @@ class _FreeMapState extends State<FreeMap> {
 
 
   //removes old posts from DB, returns true if the document is removed.
-  bool RemoveIfOutdated(Freebee fb, String docID){
+  bool removeIfOutdated(Freebee fb, String docID){
     DateTime today = new DateTime.now();
 
     DateTime fbTimeCheck = fb.postingTime.toDate().add(Duration(days: 1));
@@ -117,21 +119,23 @@ class _FreeMapState extends State<FreeMap> {
   //gets the postings from the database and puts them on the map
 
   Future<dynamic> getData() async {
+    // Clear all existing markers, then readd them, plus any new ones
+    allMarkers.clear();
     var val = Firestore.instance.collection('postings').getDocuments();
     val.then((val) {
-        //print(val.documents.length);
         for (int i = 0; i < val.documents.length; i++) {
           bool remove = false;
           Freebee freebee = Freebee();
           try {
             freebee.createFromDB(val.documents[i].data);
-            remove = RemoveIfOutdated(freebee, val.documents[i].documentID);
+            remove = removeIfOutdated(freebee, val.documents[i].documentID);
           } catch (error) {
             print(error);
           }
-          print("getdata called");
           bool itemAllowed = widget.filter.allowedItems[freebee.itemCode];
-          if(!remove && itemAllowed) {//only add freebees not filtered out
+          // only add freebees not filtered out
+          if(!remove && itemAllowed) {
+            // Create markers for every freebee that made it through filter
             Marker newMarker = Marker(
                   markerId: MarkerId(i.toString()),
                   draggable: true,
@@ -144,45 +148,12 @@ class _FreeMapState extends State<FreeMap> {
                       IconHelper().itemTypeToString(freebee.itemCode))
                   //infoWindow: InfoWindow(title: title, snippet: description)),
                   );
+            // Add markers to marker list to be published to map
             allMarkers.add(newMarker);
           }
         }
     });
     return Firestore.instance.collection('postings').getDocuments();
-  }
-  void filterMarkers()
-  {
-    allMarkers.clear();
-    var val = Firestore.instance.collection('postings').getDocuments();
-    val.then((val) {
-        //print(val.documents.length);
-        for (int i = 0; i < val.documents.length; i++) {
-          bool remove = false;
-          Freebee freebee = Freebee();
-          try {
-            freebee.createFromDB(val.documents[i].data);
-            remove = RemoveIfOutdated(freebee, val.documents[i].documentID);
-          } catch (error) {
-            print(error);
-          }
-          print("filter markers called");
-          if(!remove && widget.filter.allowedItems[freebee.itemCode]){//only add freebees not filtered out
-            Marker newMarker = Marker(
-                  markerId: MarkerId(i.toString()),
-                  draggable: true,
-                  position: LatLng(freebee.coordinates.latitude,
-                      freebee.coordinates.longitude),
-                  onTap: () {
-                    locationInfoPopUp(context, freebee);
-                  },
-                  icon: BitmapDescriptor.fromAsset(
-                      IconHelper().itemTypeToString(freebee.itemCode))
-                  //infoWindow: InfoWindow(title: title, snippet: description)),
-                  );
-            allMarkers.add(newMarker);
-          }
-        }
-    });
   }
   BitmapDescriptor customIcon;
   //when the app boots up create the map and draw all the markers on the mapp
@@ -190,8 +161,9 @@ class _FreeMapState extends State<FreeMap> {
     super.initState();
     getData();
     userIcon = BitmapDescriptor.fromAsset("assets/userIcon.png");
-    //Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
-    //Timer.periodic(Duration(seconds: 1), (Timer t) => filterMarkers());
+    // Refresh user location every second
+    Timer.periodic(Duration(seconds: 1), (Timer t) => getLocation());
+    // Refresh markers every ten seconds
     Timer.periodic(Duration(seconds: 10), (Timer t) => getData());
   }
 }

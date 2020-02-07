@@ -1,9 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
-import 'camera_widget.dart';
-import 'freebee.dart';
-import 'package:freebeezswamphacks/globals.dart' as globalVar;
 import 'filter.dart';
 
 final db = Firestore.instance;
@@ -40,7 +36,6 @@ class _FilterPageState extends State<FilterPage> {
                   {
                     setState(() {
                       widget.filter.allowedItems[0] = !widget.filter.allowedItems[0];
-                      print(widget.filter.allowedItems[0]);
                     });
                   }
                   
@@ -51,9 +46,9 @@ class _FilterPageState extends State<FilterPage> {
                     const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
                 child: RaisedButton(
                   onPressed: () {
+                    // Update FilterPageState filter to match button information
                       setState(() {
                       widget.filter.allowedItems[1] = !widget.filter.allowedItems[1];
-                      print(widget.filter.allowedItems[1]);
                     });
                   },
                   child: Text('Food'), color: widget.filter.allowedItems[1] ? Colors.blue : Colors.grey
@@ -89,7 +84,8 @@ class _FilterPageState extends State<FilterPage> {
                 child: RaisedButton(
                   onPressed: () {
                       Navigator.pop(context, widget.filter);
-                    })
+                    },
+                    child: Text('Exit'))
                 ),]
               ),
           ),

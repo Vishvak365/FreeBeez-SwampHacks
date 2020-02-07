@@ -1,6 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-
 class IconHelper {
    String userIconString = "assets/userIcon.png";
    String pizzaIconString = "assets/pizzaIcon.png";
