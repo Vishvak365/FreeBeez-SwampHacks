@@ -15,3 +15,4 @@ We also learned that creating a proper structure in the beginning in terms of no
 ## What's next for FreeBeez
 This project could take many different paths. We have implemented the technology for geolocation based image tracking and crowdsourcing. We are able to adapt the app to fit other scenarios such as helping combat food and shelter insecurities as well as emergency response.
 
+[View more info here!](https://devpost.com/software/freebeez)
